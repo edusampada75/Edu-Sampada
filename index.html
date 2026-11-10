@@ -166,6 +166,61 @@ function firstYear() {
 }
 
 function firstYearSubjects(semester) {
+  const content = document.getElementById("content");
+
+  content.innerHTML = `
+    <button class="back" onclick="goBack()">← Back</button>
+    <h2>First Year – ${semester}</h2>
+  `;
+
+  if (semester === "1st Semester") {
+    const sections = [
+      {
+        title: "Common Subjects",
+        items: [
+          "Communicative English",
+          "Indian Constitution",
+          "Samskrutika Kannada",
+          "Innovation and Design Thinking",
+          "Scientific Foundations of Health",
+          "Computer Aided Engineering Drawing",
+          "Professional Writing Skills in English",
+          "Balake Kannada"
+        ]
+      },
+      {
+        title: "CSE Subjects",
+        items: [
+          "BMATS101 – Mathematics for CSE Stream-I",
+          "BPHYS102 – Physics for CSE Stream",
+          "BCHES102 – Chemistry for CSE Stream",
+          "BPOPS103 – Principles of Programming Using C",
+          "BPLCK105B – Introduction to Python Programming",
+          "C Programming"
+        ]
+      }
+    ];
+
+    sections.forEach(section => {
+      const heading = document.createElement("h3");
+      heading.textContent = section.title;
+      content.appendChild(heading);
+
+      section.items.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "subject";
+        div.textContent = item;
+        content.appendChild(div);
+      });
+    });
+  } else {
+    const message = document.createElement("div");
+    message.className = "subject";
+    message.textContent = "Subjects will be added soon.";
+    content.appendChild(message);
+  }
+}
+  {
   showSubjectPage("First Year", "Common", semester);
 }
 
