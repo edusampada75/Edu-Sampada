@@ -3,213 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edu Sampada</title>
+<title>Edu Sampada | VTU Notes</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#18304b}
-header{background:#102b50;color:white;text-align:center;padding:30px 15px}
-header h1{margin:0;font-size:34px;letter-spacing:2px}
-header p{color:#d5e3f4}
-main{max-width:1000px;margin:30px auto;padding:15px}
-h2{color:#153c68}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
-.card{background:white;padding:22px;border-radius:12px;border:1px solid #e1e7ef;cursor:pointer}
-.card:hover{border-color:#276ba5}
-.card h3{color:#174d80}
-button{background:#174d80;color:white;padding:11px 17px;border:0;border-radius:7px;cursor:pointer}
-.subject{background:white;padding:18px;margin:12px 0;border-radius:10px;border:1px solid #e1e7ef}
-.price{color:#16834b;font-weight:bold}
-.hidden{display:none}
-.note{color:#68768a;font-size:14px}
-footer{text-align:center;padding:25px;color:#65748b}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #17243a;
+}
+header {
+  background: #142b4a;
+  color: white;
+  text-align: center;
+  padding: 30px 15px;
+}
+header h1 { margin: 0 0 8px; }
+header p { margin: 0; color: #d6e1ef; }
+main {
+  max-width: 950px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+h2 { margin-bottom: 18px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: white;
+  border: 1px solid #dce4ee;
+  border-radius: 12px;
+  padding: 22px;
+  cursor: pointer;
+  transition: .2s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: #376da8;
+}
+.card h3 { margin: 0 0 8px; }
+.card p { color: #66758a; margin: 0; font-size: 14px; }
+.back {
+  border: none;
+  background: #e4ebf4;
+  padding: 10px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.subject {
+  background: white;
+  border: 1px solid #dce4ee;
+  border-radius: 9px;
+  padding: 16px;
+  margin-bottom: 10px;
+}
+.muted { color: #718096; }
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #718096;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>EDU SAMPADA</h1>
-<p>Your Learning Destination</p>
-<p>VTU Engineering Notes and Study Materials</p>
+  <h1>EDU SAMPADA</h1>
+  <p>VTU Notes | Study Materials | Previous Year Papers</p>
 </header>
 
 <main>
-
-<section id="branchPage">
-<h2>Select Your Engineering Branch</h2>
-<div class="grid" id="branchList"></div>
-</section>
-
-<section id="schemePage" class="hidden">
-<button onclick="showPage('branchPage')">← Back</button>
-<h2 id="schemeHeading">Select Scheme</h2>
-<div class="grid" id="schemeList"></div>
-</section>
-
-<section id="semesterPage" class="hidden">
-<button onclick="showPage('schemePage')">← Back</button>
-<h2 id="semesterHeading">Select Semester</h2>
-<div class="grid" id="semesterList"></div>
-</section>
-
-<section id="subjectPage" class="hidden">
-<button onclick="showPage('semesterPage')">← Back</button>
-<h2 id="subjectHeading">Select Subject</h2>
-<p class="note">Choose a subject to explore its study materials.</p>
-<div id="subjectList"></div>
-</section>
-
+  <div id="content"></div>
 </main>
 
-<footer>
-<p>© 2026 Edu Sampada. All Rights Reserved.</p>
-<p>Learn Better. Achieve More.</p>
-</footer>
+<footer>Edu Sampada © 2026</footer>
 
 <script>
+const branches = ["ECE", "CSE", "Civil", "Mechanical"];
 
-const branches = [
-"ECE",
-"CSE",
-"Civil Engineering",
-"Mechanical Engineering"
+const semesters2022 = [
+  "3rd Semester", "4th Semester", "5th Semester",
+  "6th Semester", "7th Semester", "8th Semester"
 ];
 
-let selectedBranch = "";
-let selectedScheme = "";
-let selectedSemester = 0;
+const semesters2025 = [
+  "3rd Semester", "4th Semester",
+  "5th Semester", "6th Semester",
+  "7th Semester", "8th Semester"
+];
 
-function createCard(title, description, action, container) {
-const card = document.createElement("div");
-card.className = "card";
+// Add verified subject lists here as we finalise them.
+const subjects = {};
 
-const heading = document.createElement("h3");
-heading.textContent = title;
+let history = [];
 
-const paragraph = document.createElement("p");
-paragraph.textContent = description;
+function showPage(title, items, callback, description = "") {
+  const content = document.getElementById("content");
 
-const link = document.createElement("p");
-link.textContent = "Explore →";
+  content.innerHTML = `
+    ${history.length ? '<button class="back" onclick="goBack()">← Back</button>' : ""}
+    <h2>${title}</h2>
+    <p class="muted">${description}</p>
+    <div class="grid" id="items"></div>
+  `;
 
-card.append(heading, paragraph, link);
-card.onclick = action;
-container.appendChild(card);
+  const grid = document.getElementById("items");
+
+  items.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h3>${item}</h3><p>Open ${item}</p>`;
+    card.onclick = () => callback(item);
+    grid.appendChild(card);
+  });
 }
 
-const branchList = document.getElementById("branchList");
-
-branches.forEach(branch => {
-createCard(
-branch,
-"Explore engineering notes",
-() => openBranch(branch),
-branchList
-);
-});
-
-function openBranch(branch) {
-selectedBranch = branch;
-
-document.getElementById("schemeHeading").textContent =
-branch + " - Select Scheme";
-
-const list = document.getElementById("schemeList");
-list.innerHTML = "";
-
-createCard(
-"VTU 2022 Scheme",
-"1st to 8th Semester",
-() => openScheme("2022"),
-list
-);
-
-createCard(
-"VTU 2025 Scheme",
-"1st to 4th Semester",
-() => openScheme("2025"),
-list
-);
-
-showPage("schemePage");
+function navigate(pageFunction, ...args) {
+  history.push(() => pageFunction(...args));
+  pageFunction(...args);
 }
 
-function openScheme(scheme) {
-selectedScheme = scheme;
-
-document.getElementById("semesterHeading").textContent =
-selectedBranch + " | " + scheme + " Scheme";
-
-const list = document.getElementById("semesterList");
-list.innerHTML = "";
-
-const totalSemesters = scheme === "2022" ? 8 : 4;
-
-for(let i=1; i<=totalSemesters; i++) {
-const suffix =
-i===1 ? "st" :
-i===2 ? "nd" :
-i===3 ? "rd" : "th";
-
-createCard(
-i + suffix + " Semester",
-selectedBranch + " study materials",
-() => openSemester(i),
-list
-);
+function goBack() {
+  history.pop();
+  if (history.length) {
+    const previous = history.pop();
+    previous();
+  } else {
+    home();
+  }
 }
 
-showPage("semesterPage");
+function home() {
+  history = [];
+
+  showPage(
+    "Welcome to Edu Sampada",
+    ["First Year", ...branches],
+    item => {
+      if (item === "First Year") {
+        navigate(firstYear);
+      } else {
+        navigate(branchPage, item);
+      }
+    },
+    "Select your year or engineering branch"
+  );
 }
 
-function openSemester(semester) {
-selectedSemester = semester;
-
-document.getElementById("subjectHeading").textContent =
-selectedBranch + " | " + selectedScheme +
-" Scheme | " + semester + " Semester";
-
-const list = document.getElementById("subjectList");
-list.innerHTML = "";
-
-for(let i=1; i<=6; i++) {
-const item = document.createElement("div");
-item.className = "subject";
-
-const heading = document.createElement("h3");
-heading.textContent = "Subject " + i;
-
-const description = document.createElement("p");
-description.textContent =
-"Subject details and notes will be added here.";
-
-const price = document.createElement("p");
-price.className = "price";
-price.textContent = "Price: ₹49";
-
-const status = document.createElement("p");
-status.className = "note";
-status.textContent = "Notes coming soon";
-
-item.append(heading, description, price, status);
-list.appendChild(item);
+function firstYear() {
+  showPage(
+    "First Year",
+    ["1st Semester", "2nd Semester"],
+    semester => navigate(firstYearSubjects, semester),
+    "Common first-year section for all four branches"
+  );
 }
 
-showPage("subjectPage");
+function firstYearSubjects(semester) {
+  showSubjectPage("First Year", "Common", semester);
 }
 
-function showPage(page) {
-[
-"branchPage",
-"schemePage",
-"semesterPage",
-"subjectPage"
-].forEach(id => {
-document.getElementById(id).classList.add("hidden");
-});
-
-document.getElementById(page).classList.remove("hidden");
+function branchPage(branch) {
+  showPage(
+    branch + " Engineering",
+    ["2022 Scheme", "2025 Scheme"],
+    scheme => navigate(semesterPage, branch, scheme),
+    "Select your VTU scheme"
+  );
 }
 
+function semesterPage(branch, scheme) {
+  showPage(
+    branch + " – " + scheme,
+    scheme === "2022 Scheme" ? semesters2022 : semesters2025,
+    semester => navigate(
+      () => showSubjectPage(branch, scheme, semester)
+    ),
+    "Select your semester"
+  );
+}
+
+function showSubjectPage(branch, scheme, semester) {
+  const key = branch + "|" + scheme + "|" + semester;
+  const list = subjects[key] || [];
+
+  const content = document.getElementById("content");
+
+  content.innerHTML = `
+    <button class="back" onclick="goBack()">← Back</button>
+    <h2>${branch} – ${semester}</h2>
+    <p class="muted">${scheme === "Common" ? "First Year" : scheme}</p>
+  `;
+
+  if (branch === "ECE" && scheme === "2022 Scheme"
+      && semester === "8th Semester") {
+    content.innerHTML += `<div class="subject">Coming Soon</div>`;
+    return;
+  }
+
+  if (list.length === 0) {
+    content.innerHTML += `
+      <div class="subject">
+        Subject list will be added after verification.
+      </div>
+    `;
+    return;
+  }
+
+  list.forEach(subject => {
+    const div = document.createElement("div");
+    div.className = "subject";
+    div.textContent = subject.code
+      ? subject.code + " – " + subject.name
+      : subject.name;
+    content.appendChild(div);
+  });
+}
+
+home();
 </script>
+
 </body>
 </html>
