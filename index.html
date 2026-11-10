@@ -2,23 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edu Sampada</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f4f6fa;color:#18304b}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#18304b}
 header{background:#102b50;color:white;text-align:center;padding:30px 15px}
 header h1{margin:0;font-size:34px;letter-spacing:2px}
-header p{color:#d7e5f5}
+header p{color:#d5e3f4}
 main{max-width:1000px;margin:30px auto;padding:15px}
+h2{color:#153c68}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
 .card{background:white;padding:22px;border-radius:12px;border:1px solid #e1e7ef;cursor:pointer}
 .card:hover{border-color:#276ba5}
 .card h3{color:#174d80}
 button{background:#174d80;color:white;padding:11px 17px;border:0;border-radius:7px;cursor:pointer}
 .subject{background:white;padding:18px;margin:12px 0;border-radius:10px;border:1px solid #e1e7ef}
-.hidden{display:none}
 .price{color:#16834b;font-weight:bold}
+.hidden{display:none}
+.note{color:#68768a;font-size:14px}
 footer{text-align:center;padding:25px;color:#65748b}
 </style>
 </head>
@@ -34,19 +36,26 @@ footer{text-align:center;padding:25px;color:#65748b}
 
 <section id="branchPage">
 <h2>Select Your Engineering Branch</h2>
-<div class="grid" id="branches"></div>
+<div class="grid" id="branchList"></div>
+</section>
+
+<section id="schemePage" class="hidden">
+<button onclick="showPage('branchPage')">← Back</button>
+<h2 id="schemeHeading">Select Scheme</h2>
+<div class="grid" id="schemeList"></div>
 </section>
 
 <section id="semesterPage" class="hidden">
-<button onclick="back('branchPage')">← Back</button>
-<h2 id="branchTitle"></h2>
-<div class="grid" id="semesters"></div>
+<button onclick="showPage('schemePage')">← Back</button>
+<h2 id="semesterHeading">Select Semester</h2>
+<div class="grid" id="semesterList"></div>
 </section>
 
 <section id="subjectPage" class="hidden">
-<button onclick="back('semesterPage')">← Back</button>
-<h2 id="semesterTitle"></h2>
-<div id="subjects"></div>
+<button onclick="showPage('semesterPage')">← Back</button>
+<h2 id="subjectHeading">Select Subject</h2>
+<p class="note">Choose a subject to explore its study materials.</p>
+<div id="subjectList"></div>
 </section>
 
 </main>
@@ -66,82 +75,139 @@ const branches = [
 ];
 
 let selectedBranch = "";
+let selectedScheme = "";
 let selectedSemester = 0;
 
-const branchBox = document.getElementById("branches");
-
-branches.forEach(branch => {
+function createCard(title, description, action, container) {
 const card = document.createElement("div");
 card.className = "card";
-card.innerHTML = `
-<h3>${branch}</h3>
-<p>8 Separate Semesters</p>
-<p>Explore Notes →</p>`;
-card.onclick = () => openBranch(branch);
-branchBox.appendChild(card);
+
+const heading = document.createElement("h3");
+heading.textContent = title;
+
+const paragraph = document.createElement("p");
+paragraph.textContent = description;
+
+const link = document.createElement("p");
+link.textContent = "Explore →";
+
+card.append(heading, paragraph, link);
+card.onclick = action;
+container.appendChild(card);
+}
+
+const branchList = document.getElementById("branchList");
+
+branches.forEach(branch => {
+createCard(
+branch,
+"Explore engineering notes",
+() => openBranch(branch),
+branchList
+);
 });
 
 function openBranch(branch) {
 selectedBranch = branch;
 
-show("semesterPage");
+document.getElementById("schemeHeading").textContent =
+branch + " - Select Scheme";
 
-document.getElementById("branchTitle").textContent =
-branch + " - Select Semester";
+const list = document.getElementById("schemeList");
+list.innerHTML = "";
 
-const box = document.getElementById("semesters");
-box.innerHTML = "";
+createCard(
+"VTU 2022 Scheme",
+"1st to 8th Semester",
+() => openScheme("2022"),
+list
+);
 
-for(let i=1;i<=8;i++) {
-const suffix = i===1?"st":i===2?"nd":i===3?"rd":"th";
+createCard(
+"VTU 2025 Scheme",
+"1st to 4th Semester",
+() => openScheme("2025"),
+list
+);
 
-const card = document.createElement("div");
-card.className = "card";
-card.innerHTML = `
-<h3>${i}${suffix} Semester</h3>
-<p>${branch} Notes</p>
-<p>View Subjects →</p>`;
-card.onclick = () => openSemester(i);
-box.appendChild(card);
+showPage("schemePage");
 }
+
+function openScheme(scheme) {
+selectedScheme = scheme;
+
+document.getElementById("semesterHeading").textContent =
+selectedBranch + " | " + scheme + " Scheme";
+
+const list = document.getElementById("semesterList");
+list.innerHTML = "";
+
+const totalSemesters = scheme === "2022" ? 8 : 4;
+
+for(let i=1; i<=totalSemesters; i++) {
+const suffix =
+i===1 ? "st" :
+i===2 ? "nd" :
+i===3 ? "rd" : "th";
+
+createCard(
+i + suffix + " Semester",
+selectedBranch + " study materials",
+() => openSemester(i),
+list
+);
+}
+
+showPage("semesterPage");
 }
 
 function openSemester(semester) {
 selectedSemester = semester;
 
-show("subjectPage");
+document.getElementById("subjectHeading").textContent =
+selectedBranch + " | " + selectedScheme +
+" Scheme | " + semester + " Semester";
 
-document.getElementById("semesterTitle").textContent =
-selectedBranch + " - " + semester + " Semester";
+const list = document.getElementById("subjectList");
+list.innerHTML = "";
 
-const box = document.getElementById("subjects");
-box.innerHTML = "";
-
-for(let i=1;i<=6;i++) {
+for(let i=1; i<=6; i++) {
 const item = document.createElement("div");
 item.className = "subject";
 
-item.innerHTML = `
-<h3>Subject ${i}</h3>
-<p>Study materials and PDF notes will be available here.</p>
-<p class="price">₹49</p>
-<button onclick="alert('Notes will be uploaded soon!')">
-View Notes
-</button>`;
+const heading = document.createElement("h3");
+heading.textContent = "Subject " + i;
 
-box.appendChild(item);
-}
+const description = document.createElement("p");
+description.textContent =
+"Subject details and notes will be added here.";
+
+const price = document.createElement("p");
+price.className = "price";
+price.textContent = "Price: ₹49";
+
+const status = document.createElement("p");
+status.className = "note";
+status.textContent = "Notes coming soon";
+
+item.append(heading, description, price, status);
+list.appendChild(item);
 }
 
-function show(page) {
-["branchPage","semesterPage","subjectPage"].forEach(id => {
+showPage("subjectPage");
+}
+
+function showPage(page) {
+[
+"branchPage",
+"schemePage",
+"semesterPage",
+"subjectPage"
+].forEach(id => {
 document.getElementById(id).classList.add("hidden");
 });
-document.getElementById(page).classList.remove("hidden");
-}
 
-function back(page) {
-show(page);
+document.getElementById(page).classList.remove("hidden");
 }
 
 </script>
