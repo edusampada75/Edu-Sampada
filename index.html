@@ -3,70 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edu Sampada | VTU Notes</title>
+<title>Edu Sampada | VTU Study Materials</title>
 
 <style>
-* { box-sizing: border-box; }
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: Arial, sans-serif;
-  background: #f4f7fb;
-  color: #17243a;
+  background: #f5f7fb;
+  color: #263248;
 }
+
 header {
-  background: #142b4a;
+  background: #172b4d;
   color: white;
+  padding: 20px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+.hero {
   text-align: center;
-  padding: 30px 15px;
+  padding: 65px 20px;
+  background: #e7efff;
 }
-header h1 { margin: 0 0 8px; }
-header p { margin: 0; color: #d6e1ef; }
-main {
-  max-width: 950px;
-  margin: 30px auto;
-  padding: 0 16px;
+
+.hero h1 {
+  font-size: 36px;
+  color: #172b4d;
+  margin-bottom: 15px;
 }
-h2 { margin-bottom: 18px; }
-.grid {
+
+.hero p {
+  color: #53647d;
+  font-size: 17px;
+}
+
+.search {
+  display: block;
+  width: 85%;
+  max-width: 500px;
+  padding: 14px;
+  margin: 25px auto 0;
+  border: 1px solid #ccd5e2;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 35px auto;
+}
+
+.section-title {
+  margin-bottom: 20px;
+  color: #172b4d;
+}
+
+.cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 16px;
+  gap: 20px;
 }
+
 .card {
   background: white;
-  border: 1px solid #dce4ee;
+  padding: 25px;
   border-radius: 12px;
-  padding: 22px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
+  border: 1px solid #e5eaf1;
 }
+
 .card:hover {
-  transform: translateY(-3px);
-  border-color: #376da8;
+  transform: translateY(-4px);
+  border-color: #527de5;
 }
-.card h3 { margin: 0 0 8px; }
-.card p { color: #66758a; margin: 0; font-size: 14px; }
-.back {
-  border: none;
-  background: #e4ebf4;
-  padding: 10px 16px;
-  border-radius: 7px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-.subject {
-  background: white;
-  border: 1px solid #dce4ee;
-  border-radius: 9px;
-  padding: 16px;
+
+.card h3 {
+  color: #234b91;
   margin-bottom: 10px;
 }
-.muted { color: #718096; }
+
+.card p {
+  color: #68778d;
+  font-size: 14px;
+}
+
+.btn {
+  padding: 11px 18px;
+  background: #2859b8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 8px 5px 8px 0;
+}
+
+.btn:hover {
+  background: #173e89;
+}
+
+.back {
+  background: #64748b;
+  color: white;
+  padding: 10px 17px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.subject {
+  background: white;
+  padding: 18px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.subject h3 {
+  color: #234b91;
+  margin-bottom: 8px;
+}
+
+.scheme {
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+}
+
 footer {
   text-align: center;
+  background: #172b4d;
+  color: white;
   padding: 25px;
-  color: #718096;
+  margin-top: 60px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media(max-width:600px) {
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  header {
+    justify-content: center;
+  }
 }
 </style>
 </head>
@@ -74,214 +182,279 @@ footer {
 <body>
 
 <header>
-  <h1>EDU SAMPADA</h1>
-  <p>VTU Notes | Study Materials | Previous Year Papers</p>
+  <div class="logo">Edu Sampada</div>
+  <nav>
+    <a href="#" onclick="home();return false;">Home</a>
+    <a href="#notes">VTU Notes</a>
+  </nav>
 </header>
 
-<main>
-  <div id="content"></div>
+<section class="hero">
+  <h1>Welcome to Edu Sampada</h1>
+  <p>Your learning destination for VTU notes and study materials.</p>
+  <input
+    class="search"
+    id="searchBox"
+    type="text"
+    placeholder="Search branch or semester..."
+    oninput="searchItems()">
+</section>
+
+<main class="container" id="notes">
+
+  <div id="content">
+    <h2 class="section-title">Select Your Engineering Branch</h2>
+    <div class="cards" id="branchCards"></div>
+  </div>
+
 </main>
 
-<footer>Edu Sampada © 2026</footer>
+<footer>
+  <h3>Edu Sampada</h3>
+  <p>Learn Better. Grow Further.</p>
+  <p>VTU Study Materials</p>
+</footer>
 
 <script>
+
 const branches = ["ECE", "CSE", "Civil", "Mechanical"];
 
-const semesters2022 = [
-  "3rd Semester", "4th Semester", "5th Semester",
-  "6th Semester", "7th Semester", "8th Semester"
+const semesters = [
+  "1st Semester",
+  "2nd Semester",
+  "3rd Semester",
+  "4th Semester",
+  "5th Semester",
+  "6th Semester",
+  "7th Semester",
+  "8th Semester"
 ];
 
-const semesters2025 = [
-  "3rd Semester", "4th Semester",
-  "5th Semester", "6th Semester",
-  "7th Semester", "8th Semester"
-];
+let currentBranch = "";
+let currentSemester = "";
+let currentScheme = "2022";
 
-// Add verified subject lists here as we finalise them.
-const subjects = {};
+const content = document.getElementById("content");
 
-let history = [];
+function home() {
+  document.getElementById("searchBox").value = "";
+  showBranches();
+}
 
-function showPage(title, items, callback, description = "") {
-  const content = document.getElementById("content");
-
+function showBranches() {
   content.innerHTML = `
-    ${history.length ? '<button class="back" onclick="goBack()">← Back</button>' : ""}
-    <h2>${title}</h2>
-    <p class="muted">${description}</p>
-    <div class="grid" id="items"></div>
+    <h2 class="section-title">Select Your Engineering Branch</h2>
+    <div class="cards" id="branchCards"></div>
   `;
 
-  const grid = document.getElementById("items");
+  const cards = document.getElementById("branchCards");
 
-  items.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `<h3>${item}</h3><p>Open ${item}</p>`;
-    card.onclick = () => callback(item);
-    grid.appendChild(card);
+  branches.forEach(branch => {
+    cards.innerHTML += `
+      <div class="card" onclick="showSemesters('${branch}')">
+        <h3>${branch}</h3>
+        <p>View semesters and study materials</p>
+        <br>
+        <button class="btn">Explore</button>
+      </div>
+    `;
   });
 }
 
-function navigate(pageFunction, ...args) {
-  history.push(() => pageFunction(...args));
-  pageFunction(...args);
+function showSemesters(branch) {
+  currentBranch = branch;
+
+  content.innerHTML = `
+    <button class="back" onclick="showBranches()">← Back</button>
+    <h2 class="section-title">${branch} – Select Semester</h2>
+    <div class="cards" id="semesterCards"></div>
+  `;
+
+  const cards = document.getElementById("semesterCards");
+
+  semesters.forEach(semester => {
+    cards.innerHTML += `
+      <div class="card"
+        onclick="showSubjects('${semester}')">
+        <h3>${semester}</h3>
+        <p>${branch} Study Materials</p>
+        <br>
+        <button class="btn">View Subjects</button>
+      </div>
+    `;
+  });
 }
 
-function goBack() {
-  history.pop();
-  if (history.length) {
-    const previous = history.pop();
-    previous();
-  } else {
-    home();
-  }
+function showSubjects(semester) {
+  currentSemester = semester;
+
+  content.innerHTML = `
+    <button class="back" onclick="showSemesters('${currentBranch}')">← Back</button>
+
+    <h2 class="section-title">
+      ${currentBranch} – ${semester}
+    </h2>
+
+    <p>Select VTU Scheme:</p>
+
+    <select class="scheme" id="schemeSelect"
+      onchange="changeScheme(this.value)">
+      <option value="2022">VTU 2022 Scheme</option>
+      <option value="2025">VTU 2025 Scheme</option>
+    </select>
+
+    <div id="subjectList"></div>
+  `;
+
+  currentScheme = "2022";
+  renderSubjects();
 }
 
-function home() {
-  history = [];
-
-  showPage(
-    "Welcome to Edu Sampada",
-    ["First Year", ...branches],
-    item => {
-      if (item === "First Year") {
-        navigate(firstYear);
-      } else {
-        navigate(branchPage, item);
-      }
-    },
-    "Select your year or engineering branch"
-  );
-}
-
-function firstYear() {
-  showPage(
-    "First Year",
-    ["1st Semester", "2nd Semester"],
-    semester => navigate(firstYearSubjects, semester),
-    "Common first-year section for all four branches"
-  );
+function changeScheme(scheme) {
+  currentScheme = scheme;
+  renderSubjects();
 }
 
 function firstYearSubjects(semester) {
-  const content = document.getElementById("content");
 
-  content.innerHTML = `
-    <button class="back" onclick="goBack()">← Back</button>
-    <h2>First Year – ${semester}</h2>
-  `;
+  const sections = [
+    {
+      title: "Common Subjects",
+      items: [
+        "Communicative English",
+        "Indian Constitution",
+        "Samskrutika Kannada",
+        "Innovation and Design Thinking",
+        "Scientific Foundations of Health",
+        "Computer Aided Engineering Drawing",
+        "Professional Writing Skills in English",
+        "Balake Kannada"
+      ]
+    },
+    {
+      title: "CSE Subjects",
+      items: [
+        "BMATS101 – Mathematics for CSE Stream-I",
+        "BPHYS102 – Physics for CSE Stream",
+        "BCHES102 – Chemistry for CSE Stream",
+        "BPOPS103 – Principles of Programming Using C",
+        "BPLCK105B – Introduction to Python Programming",
+        "C Programming"
+      ]
+    }
+  ];
 
   if (semester === "1st Semester") {
-    const sections = [
-      {
-        title: "Common Subjects",
-        items: [
-          "Communicative English",
-          "Indian Constitution",
-          "Samskrutika Kannada",
-          "Innovation and Design Thinking",
-          "Scientific Foundations of Health",
-          "Computer Aided Engineering Drawing",
-          "Professional Writing Skills in English",
-          "Balake Kannada"
-        ]
-      },
-      {
-        title: "CSE Subjects",
-        items: [
-          "BMATS101 – Mathematics for CSE Stream-I",
-          "BPHYS102 – Physics for CSE Stream",
-          "BCHES102 – Chemistry for CSE Stream",
-          "BPOPS103 – Principles of Programming Using C",
-          "BPLCK105B – Introduction to Python Programming",
-          "C Programming"
-        ]
-      }
-    ];
-
-    sections.forEach(section => {
-      const heading = document.createElement("h3");
-      heading.textContent = section.title;
-      content.appendChild(heading);
-
-      section.items.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "subject";
-        div.textContent = item;
-        content.appendChild(div);
-      });
-    });
-  } else {
-    const message = document.createElement("div");
-    message.className = "subject";
-    message.textContent = "Subjects will be added soon.";
-    content.appendChild(message);
-  }
-}
-  {
-  showSubjectPage("First Year", "Common", semester);
-}
-
-function branchPage(branch) {
-  showPage(
-    branch + " Engineering",
-    ["2022 Scheme", "2025 Scheme"],
-    scheme => navigate(semesterPage, branch, scheme),
-    "Select your VTU scheme"
-  );
-}
-
-function semesterPage(branch, scheme) {
-  showPage(
-    branch + " – " + scheme,
-    scheme === "2022 Scheme" ? semesters2022 : semesters2025,
-    semester => navigate(
-      () => showSubjectPage(branch, scheme, semester)
-    ),
-    "Select your semester"
-  );
-}
-
-function showSubjectPage(branch, scheme, semester) {
-  const key = branch + "|" + scheme + "|" + semester;
-  const list = subjects[key] || [];
-
-  const content = document.getElementById("content");
-
-  content.innerHTML = `
-    <button class="back" onclick="goBack()">← Back</button>
-    <h2>${branch} – ${semester}</h2>
-    <p class="muted">${scheme === "Common" ? "First Year" : scheme}</p>
-  `;
-
-  if (branch === "ECE" && scheme === "2022 Scheme"
-      && semester === "8th Semester") {
-    content.innerHTML += `<div class="subject">Coming Soon</div>`;
-    return;
+    return sections;
   }
 
-  if (list.length === 0) {
-    content.innerHTML += `
+  return [];
+}
+
+function renderSubjects() {
+
+  const list = document.getElementById("subjectList");
+
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (currentScheme === "2025") {
+    list.innerHTML = `
       <div class="subject">
-        Subject list will be added after verification.
+        <h3>VTU 2025 Scheme</h3>
+        <p>Subject lists and notes will be added after syllabus verification.</p>
       </div>
     `;
     return;
   }
 
-  list.forEach(subject => {
-    const div = document.createElement("div");
-    div.className = "subject";
-    div.textContent = subject.code
-      ? subject.code + " – " + subject.name
-      : subject.name;
-    content.appendChild(div);
+  let sections = [];
+
+  if (currentBranch === "CSE" &&
+      (currentSemester === "1st Semester" ||
+       currentSemester === "2nd Semester")) {
+
+    sections = firstYearSubjects(currentSemester);
+
+  }
+
+  if (sections.length === 0) {
+    list.innerHTML = `
+      <div class="subject">
+        <h3>${currentBranch} – ${currentSemester}</h3>
+        <p>Subjects and study materials will be added soon.</p>
+      </div>
+    `;
+    return;
+  }
+
+  sections.forEach(section => {
+
+    const heading = document.createElement("h2");
+    heading.className = "section-title";
+    heading.textContent = section.title;
+
+    list.appendChild(heading);
+
+    section.items.forEach(subject => {
+
+      const div = document.createElement("div");
+      div.className = "subject";
+
+      const title = document.createElement("h3");
+      title.textContent = subject;
+
+      const description = document.createElement("p");
+      description.textContent = "VTU 2022 Scheme – Study Materials";
+
+      const preview = document.createElement("button");
+      preview.className = "btn";
+      preview.textContent = "Preview Notes";
+
+      preview.onclick = function() {
+        alert("Notes preview for " + subject + " will be added soon.");
+      };
+
+      const unlock = document.createElement("button");
+      unlock.className = "btn";
+      unlock.textContent = "Unlock Notes – ₹49";
+
+      unlock.onclick = function() {
+        alert("Online payment will be connected after setting up the payment system.");
+      };
+
+      div.appendChild(title);
+      div.appendChild(description);
+      div.appendChild(preview);
+      div.appendChild(unlock);
+
+      list.appendChild(div);
+
+    });
+
   });
+
 }
 
-home();
+function searchItems() {
+
+  const query = document.getElementById("searchBox")
+    .value.toLowerCase();
+
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    card.style.display =
+      card.innerText.toLowerCase().includes(query)
+      ? ""
+      : "none";
+  });
+
+}
+
+showBranches();
+
 </script>
 
 </body>
